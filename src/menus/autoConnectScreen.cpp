@@ -198,7 +198,7 @@ void AutoConnectScreen::connectToMyShip() {
         // Reset the dialog.
         password_entry->show();
         password_entry_ok->show();
-        password_label->setText("Enter this ship's control code")->setPosition(0, 40, ATopCenter);
+        password_label->setText("Enter this ship's control code:")->setPosition(0, 40, ATopCenter);
         password_confirmation->hide();
         // Hide the dialog.
         password_overlay->hide();
@@ -210,7 +210,7 @@ void AutoConnectScreen::connectToMyShip() {
         LOG(INFO) << "Autoconnect selected " << ship->getCallSign() << ", which has a control code.";
 
         if(this->is_integer(ship->control_code) && PreferencesManager::get("autoconnect_control_code_prefer_numeric_pad", "").toInt() > 0) {
-            control_code_numeric_panel = new GuiControlNumericEntryPanel(this, 1, "Enter this ship's control code:");
+            control_code_numeric_panel = new GuiControlNumericEntryPanel(this, 1, "Enter this ship's control code");
             control_code_numeric_panel->enterCallback([this](int value) {
                 P<PlayerSpaceship> ship = my_spaceship;
 
