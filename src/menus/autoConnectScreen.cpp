@@ -198,7 +198,7 @@ void AutoConnectScreen::connectToMyShip() {
         // Reset the dialog.
         password_entry->show();
         password_entry_ok->show();
-        password_label->setText("Enter this ship's control code:")->setPosition(0, 40, ATopCenter);
+        password_label->setText("Enter this ship's control code")->setPosition(0, 40, ATopCenter);
         password_confirmation->hide();
         // Hide the dialog.
         password_overlay->hide();
