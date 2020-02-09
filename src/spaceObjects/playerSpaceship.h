@@ -109,6 +109,8 @@ public:
     bool shields_active;
     // Password to join a ship. Default is empty.
     string control_code;
+    // Enable/Disable ship destruction due to reactor overheat
+    bool disable_reactor_overheat_ship_destruction;
 
 private:
     // soundManager index of the shield object
