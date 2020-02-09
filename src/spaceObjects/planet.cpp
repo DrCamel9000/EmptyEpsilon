@@ -97,7 +97,9 @@ REGISTER_SCRIPT_SUBCLASS(Planet, SpaceObject)
     REGISTER_SCRIPT_CLASS_FUNCTION(Planet, setPlanetAtmosphereTexture);
     REGISTER_SCRIPT_CLASS_FUNCTION(Planet, setPlanetSurfaceTexture);
     REGISTER_SCRIPT_CLASS_FUNCTION(Planet, setPlanetCloudTexture);
+    REGISTER_SCRIPT_CLASS_FUNCTION(Planet, getPlanetRadius);
     REGISTER_SCRIPT_CLASS_FUNCTION(Planet, setPlanetRadius);
+    REGISTER_SCRIPT_CLASS_FUNCTION(Planet, getCollisionSize);
     REGISTER_SCRIPT_CLASS_FUNCTION(Planet, setPlanetCloudRadius);
     REGISTER_SCRIPT_CLASS_FUNCTION(Planet, setDistanceFromMovementPlane);
     REGISTER_SCRIPT_CLASS_FUNCTION(Planet, setAxialRotationTime);
@@ -158,6 +160,16 @@ void Planet::setPlanetSurfaceTexture(string texture_name)
 void Planet::setPlanetCloudTexture(string texture_name)
 {
     cloud_texture = texture_name;
+}
+
+float Planet::getPlanetRadius()
+{
+    return planet_size;
+}
+
+float Planet::getCollisionSize()
+{
+    return collision_size;
 }
 
 void Planet::setPlanetRadius(float size)
