@@ -252,6 +252,8 @@ public:
     virtual int scanningComplexity(P<SpaceObject> other) override;
     virtual int scanningChannelDepth(P<SpaceObject> other) override;
     virtual void scannedBy(P<SpaceObject> other) override;
+    void setScanState(EScannedState scanned);
+    void setScanStateByFaction(string faction_name, EScannedState scanned);
 
     bool isFriendOrFoeIdentified();//[DEPRICATED]
     bool isFullyScanned();//[DEPRICATED]
@@ -403,7 +405,7 @@ public:
 
     void addBroadcast(int threshold, string message);
 
-    //Return a string that can be appended to an object create function in the lua scripting.
+    // Return a string that can be appended to an object create function in the lua scripting.
     // This function is used in getScriptExport calls to adjust for tweaks done in the GM screen.
     string getScriptExportModificationsOnTemplate();
 };

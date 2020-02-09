@@ -78,6 +78,11 @@ REGISTER_SCRIPT_SUBCLASS_NO_CREATE(SpaceShip, ShipTemplateBasedObject)
     REGISTER_SCRIPT_CLASS_FUNCTION(SpaceShip, setRadarTrace);
 
     REGISTER_SCRIPT_CLASS_FUNCTION(SpaceShip, addBroadcast);
+
+    /// Set the scan state of this ship for every faction.
+    REGISTER_SCRIPT_CLASS_FUNCTION(SpaceShip, setScanState);
+    /// Set the scane state of this ship for a particular faction.
+    REGISTER_SCRIPT_CLASS_FUNCTION(SpaceShip, setScanStateByFaction);
 }
 
 SpaceShip::SpaceShip(string multiplayerClassName, float multiplayer_significant_range)
@@ -184,7 +189,9 @@ SpaceShip::SpaceShip(string multiplayerClassName, float multiplayer_significant_
     scanning_complexity_value = -1;
     scanning_depth_value = -1;
 
-    setRadarSignatureInfo(0.05, 0.3, 0.3);
+    // Ships can have dynamic signatures. Initialize a default baseline value
+    // from which clients derive the dynamic signature on update.
+    setRadarSignatureInfo(0.05, 0.2, 0.2);
 
     if (game_server)
         setCallSign(gameGlobalInfo->getNextShipCallsign());
@@ -816,6 +823,19 @@ void SpaceShip::scannedBy(P<SpaceObject> other)
     }
 }
 
+void SpaceShip::setScanState(EScannedState state)
+{
+    for(unsigned int faction_id = 0; faction_id < factionInfo.size(); faction_id++)
+    {
+        setScannedStateForFaction(faction_id, state);
+    }
+}
+
+void SpaceShip::setScanStateByFaction(string faction_name, EScannedState state)
+{
+    setScannedStateForFaction(FactionInfo::findFactionId(faction_name), state);
+}
+
 bool SpaceShip::isFriendOrFoeIdentified()
 {
     LOG(WARNING) << "Depricated \"isFriendOrFoeIdentified\" function called, use isFriendOrFoeIdentifiedBy or isFriendOrFoeIdentifiedByFaction.";
@@ -1017,7 +1037,9 @@ bool SpaceShip::hasSystem(ESystem system)
 float SpaceShip::getSystemEffectiveness(ESystem system)
 {
     float power = systems[system].power_level;
-    power *= (1.0f - systems[system].hacked_level * 0.75f);
+    
+    // Substract the hacking from the power, making double hacked systems run at 25% efficiency.
+    power = std::max(0.0f, power - systems[system].hacked_level * 0.75f);
 
     // Degrade all systems except the reactor once energy level drops below 10.
     if (system != SYS_Reactor)
